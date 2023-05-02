@@ -42,6 +42,7 @@
 =======
 (map! :leader
   "g P" #'magit-push
+  "g p" #'magit-pull
   "g d" #'magit-diff
   "g SPC" #'magit-status
   "g e" #'flymake-goto-next-error
