@@ -46,7 +46,9 @@
   "g d" #'magit-diff
   "g SPC" #'magit-status
   "g e" #'flymake-goto-next-error
-  "g E" #'flymake-goto-prev-error)
+  "g E" #'flymake-goto-prev-error
+  "g k" #'+vc-gutter/previous-hunk
+  "g j" #'+vc-gutter/next-hunk)
 
 >>>>>>> 934ef27 (flymake: add next/prev error shortcuts)
 (defun move-line-up ()
