@@ -38,8 +38,6 @@
     (:prefix "SPC w"
      :desc "Hydra resize" :n "SPC" #'doom-window-resize-hydra/body))
 
-<<<<<<< HEAD
-=======
 (map! :leader
   "g P" #'magit-push
   "g p" #'magit-pull
@@ -50,7 +48,9 @@
   "g k" #'+vc-gutter/previous-hunk
   "g j" #'+vc-gutter/next-hunk)
 
->>>>>>> 934ef27 (flymake: add next/prev error shortcuts)
+(map! :n
+  "g ." #'magit-status)
+
 (defun move-line-up ()
   "Move up the current line."
   ;; (interactive)
