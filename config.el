@@ -284,7 +284,10 @@
   (setq exec-path (append exec-path '("/home/jolin/.cargo/bin"))))
 
 (after! evil-snipe
-  (setq evil-snipe-scope 'whole-visible))
+  (setq evil-snipe-scope 'whole-buffer))
+
+(evil-snipe-def 1 'inclusive "t" "T")
+(evil-snipe-def 1 'exclusive "f" "F")
 
 ;; (module-load "/Users/jolin/.emacs.d/.local/straight/repos/emacs-zmq/emacs-zmq.dylib")
 
