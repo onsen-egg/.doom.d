@@ -46,7 +46,8 @@
   "g e" #'flymake-goto-next-error
   "g E" #'flymake-goto-prev-error
   "g k" #'+vc-gutter/previous-hunk
-  "g j" #'+vc-gutter/next-hunk)
+  "g j" #'+vc-gutter/next-hunk
+  "g c a" #'magit-commit-amend)
 
 (map! :n
   "g >" #'magit-status-full
