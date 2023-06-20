@@ -42,14 +42,119 @@
   "g P" #'magit-push
   "g p" #'magit-pull
   "g d" #'magit-diff
-  "g SPC" #'magit-status
+  "g g" #'magit-status-full
   "g e" #'flymake-goto-next-error
   "g E" #'flymake-goto-prev-error
   "g k" #'+vc-gutter/previous-hunk
   "g j" #'+vc-gutter/next-hunk)
 
 (map! :n
-  "g ." #'magit-status)
+  "g >" #'magit-status-full
+  "g ." #'magit-status-truncated)
+
+(map! "g" 'self-insert-command)
+
+(map! :map magit-mode-map
+  "." #'magit-status-toggle-truncated)
+
+(setq magit-truncate-status t)
+
+(setq magit-status-sections-hook-truncated
+      '(
+        magit-insert-status-headers
+        ;; magit-insert-merge-log
+        ;; magit-insert-rebase-sequence
+        magit-insert-am-sequence
+        magit-insert-sequencer-sequence
+        magit-insert-bisect-output
+        magit-insert-bisect-rest
+        magit-insert-bisect-log
+        ;; magit-insert-untracked-files
+        magit-insert-unstaged-changes
+        magit-insert-staged-changes
+        ;; magit-insert-stashes
+        ;; magit-insert-unpushed-to-pushremote
+        ;; magit-insert-unpushed-to-upstream-or-recent
+        ;; magit-insert-unpulled-from-pushremote
+        ;; magit-insert-unpulled-from-upstream
+        ))
+
+(setq magit-status-headers-hook-truncated
+      '(magit-insert-error-header
+        ;; magit-insert-diff-filter-header
+        magit-insert-head-branch-header
+        ;; magit-insert-upstream-branch-header
+        ;; magit-insert-push-branch-header
+        ;; magit-insert-tags-header
+        ))
+
+(setq magit-status-sections-hook-full
+      '(
+        magit-insert-status-headers
+        magit-insert-merge-log
+        magit-insert-rebase-sequence
+        magit-insert-am-sequence
+        magit-insert-sequencer-sequence
+        magit-insert-bisect-output
+        magit-insert-bisect-rest
+        magit-insert-bisect-log
+        magit-insert-untracked-files
+        magit-insert-unstaged-changes
+        magit-insert-staged-changes
+        magit-insert-stashes
+        magit-insert-unpushed-to-pushremote
+        magit-insert-unpushed-to-upstream-or-recent
+        magit-insert-unpulled-from-pushremote
+        magit-insert-unpulled-from-upstream
+        ))
+
+(setq magit-status-headers-hook-full
+      '(magit-insert-error-header
+        magit-insert-diff-filter-header
+        magit-insert-head-branch-header
+        magit-insert-upstream-branch-header
+        magit-insert-push-branch-header
+        magit-insert-tags-header
+        ))
+
+;; Generating the full status is annoyingly slow;
+;; only show barebones status features on toggle.
+(defun magit-status-toggle-truncated ()
+  "Show the full magit status buffer"
+  (interactive)
+  (if magit-truncate-status
+      (progn (setq magit-truncate-status nil)
+             (setq magit-status-sections-hook
+                   magit-status-sections-hook-full)
+             (setq magit-status-headers-hook
+                   magit-status-headers-hook-full))
+    (setq magit-truncate-status t)
+    (setq magit-status-sections-hook
+          magit-status-sections-hook-truncated)
+    (setq magit-status-headers-hook
+          magit-status-headers-hook-truncated))
+
+  (magit-status))
+
+(defun magit-status-truncated ()
+  (interactive)
+  (setq magit-truncate-status t)
+  (setq magit-status-sections-hook
+        magit-status-sections-hook-truncated)
+  (setq magit-status-headers-hook
+        magit-status-headers-hook-truncated)
+
+  (magit-status))
+
+(defun magit-status-full ()
+  (interactive)
+  (setq magit-truncate-status nil)
+  (setq magit-status-sections-hook
+        magit-status-sections-hook-full)
+  (setq magit-status-headers-hook
+        magit-status-headers-hook-full)
+
+  (magit-status))
 
 (defun move-line-up ()
   "Move up the current line."
@@ -316,5 +421,14 @@
                   (delete-region start end)
                   (goto-char start)
                   (insert outputStr))))
+
+;; this doesn't work :/
+(defun kb/toggle-window-transparency ()
+  "Toggle transparency."
+  (interactive)
+  (let ((alpha-transparency 75))
+    (pcase (frame-parameter nil 'alpha-background)
+      (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
+      (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
 
 (setq exec-path (append exec-path '("/Users/jolin/.cargo/bin")))
