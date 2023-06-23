@@ -1,164 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(map!
-    (:prefix "SPC w"
-     :desc "Hydra resize" :n "SPC" #'doom-window-resize-hydra/body))
-
-(map! :map evil-outer-text-objects-map
-  "b" #'evil-a-paren
-  "B" #'evil-a-bracket
-  "c" #'evil-a-curly
-  "C" #'evilnc-outer-comment)
-
-(map! :map evil-inner-text-objects-map
-  "b" #'evil-inner-paren
-  "B" #'evil-inner-bracket
-  "c" #'evil-inner-curly
-  "C" #'evilnc-inner-comment)
-
-(map! :m
-  "0" #'doom/backward-to-bol-or-indent)
-
-(map! :n
-  ;; "-" #'evil-previous-line-first-non-blank) ;; original binding
-  "-" #'evil-end-of-line)
-
-(map! :leader
-  "g P" #'magit-push
-  "g p" #'magit-pull
-  "g d" #'magit-diff
-  "g g" #'magit-status-full
-  "g e" #'flymake-goto-next-error
-  "g E" #'flymake-goto-prev-error
-  "g k" #'+vc-gutter/previous-hunk
-  "g j" #'+vc-gutter/next-hunk
-  "g c a" #'magit-commit-amend)
-
-(map! :n
-  "g >" #'magit-status-full
-  "g ." #'magit-status-truncated)
-
-(map! :map magit-mode-map
-  "." #'magit-status-toggle-truncated)
-
-(setq magit-truncate-status t)
-
-(setq magit-status-sections-hook-truncated
-      '(
-        magit-insert-status-headers
-        ;; magit-insert-merge-log
-        ;; magit-insert-rebase-sequence
-        magit-insert-am-sequence
-        magit-insert-sequencer-sequence
-        magit-insert-bisect-output
-        magit-insert-bisect-rest
-        magit-insert-bisect-log
-        ;; magit-insert-untracked-files
-        magit-insert-unstaged-changes
-        magit-insert-staged-changes
-        ;; magit-insert-stashes
-        ;; magit-insert-unpushed-to-pushremote
-        ;; magit-insert-unpushed-to-upstream-or-recent
-        ;; magit-insert-unpulled-from-pushremote
-        ;; magit-insert-unpulled-from-upstream
-        ))
-
-(setq magit-status-headers-hook-truncated
-      '(magit-insert-error-header
-        ;; magit-insert-diff-filter-header
-        magit-insert-head-branch-header
-        ;; magit-insert-upstream-branch-header
-        ;; magit-insert-push-branch-header
-        ;; magit-insert-tags-header
-        ))
-
-(setq magit-status-sections-hook-full
-      '(
-        magit-insert-status-headers
-        magit-insert-merge-log
-        magit-insert-rebase-sequence
-        magit-insert-am-sequence
-        magit-insert-sequencer-sequence
-        magit-insert-bisect-output
-        magit-insert-bisect-rest
-        magit-insert-bisect-log
-        magit-insert-untracked-files
-        magit-insert-unstaged-changes
-        magit-insert-staged-changes
-        magit-insert-stashes
-        magit-insert-unpushed-to-pushremote
-        magit-insert-unpushed-to-upstream-or-recent
-        magit-insert-unpulled-from-pushremote
-        magit-insert-unpulled-from-upstream
-        ))
-
-(setq magit-status-headers-hook-full
-      '(magit-insert-error-header
-        magit-insert-diff-filter-header
-        magit-insert-head-branch-header
-        magit-insert-upstream-branch-header
-        magit-insert-push-branch-header
-        magit-insert-tags-header
-        ))
-
-;; Generating the full status is annoyingly slow;
-;; only show barebones status features on toggle.
-(defun magit-status-toggle-truncated ()
-  "Show the full magit status buffer"
-  (interactive)
-  (if magit-truncate-status
-      (progn (setq magit-truncate-status nil)
-             (setq magit-status-sections-hook
-                   magit-status-sections-hook-full)
-             (setq magit-status-headers-hook
-                   magit-status-headers-hook-full))
-    (setq magit-truncate-status t)
-    (setq magit-status-sections-hook
-          magit-status-sections-hook-truncated)
-    (setq magit-status-headers-hook
-          magit-status-headers-hook-truncated))
-
-  (magit-status))
-
-(defun magit-status-truncated ()
-  (interactive)
-  (setq magit-truncate-status t)
-  (setq magit-status-sections-hook
-        magit-status-sections-hook-truncated)
-  (setq magit-status-headers-hook
-        magit-status-headers-hook-truncated)
-
-  (magit-status))
-
-(defun magit-status-full ()
-  (interactive)
-  (setq magit-truncate-status nil)
-  (setq magit-status-sections-hook
-        magit-status-sections-hook-full)
-  (setq magit-status-headers-hook
-        magit-status-headers-hook-full)
-
-  (magit-status))
-
-(defun move-line-up ()
-  "Move up the current line."
-  ;; (interactive)
-  ;; (transpose-lines 1)
-  ;; (forward-line -2)
-  ;; (indent-according-to-mode))
-  (forward-line -1))
-
-(defun move-line-down ()
-  "Move down the current line."
-  ;; (interactive)
-  ;; (transpose-lines 1)
-  ;; (forward-line -1)
-  ;; (indent-according-to-mode))
-  (forward-line 1))
-
-;; (global-set-key [(control q control qq)]  'move-line-up)
-;; (global-set-key [(control j)]  'move-line-down)
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name ""
@@ -166,12 +7,6 @@
 
 (beacon-mode 1)
 (map! :leader "l" #'beacon-blink)
-;; (map! :i "SPC" #'beacon-blink)
-;; (global-unset-key (kbd "SPC"))
-;; (map! :g "SPC" #'beacon-blink)
-;; (map! "SPC" 'self-insert-command) ;; This was the fix
-;; (map! :i "SPC" #'beacon-blink)
-;; (map! :i "SPC" nil)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -240,6 +75,25 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+(load! "+git")
+(load! "+vim")
+(load! "+window")
+(load! "+modeline")
+
+(defun splash-banner ()
+  (let* ((banner '("૮ ・ﻌ・ა"
+                   ))
+         (longest-line (apply #'max (mapcar #'length banner))))
+    (put-text-property
+     (point)
+     (dolist (line banner (point))
+       (insert (+doom-dashboard--center
+                +doom-dashboard--width
+                (concat line (make-string (max 0 (- longest-line (length line))) 32)))
+               "\n"))
+     'face 'doom-dashboard-banner)))
+
+(setq +doom-dashboard-ascii-banner-fn #'splash-banner)
 
 ;; https://emacs.stackexchange.com/questions/58463/project-el-override-project-root-with-dir-local-var
 (defun cargo-project-override (dir)
@@ -259,15 +113,6 @@
   ;; (setq lsp-signature-auto-activate nil)
   ;; (setq eldoc-echo-area-use-multiline-p nil))
   )
-
-(defun ediff-copy-both-to-C ()
-  (interactive)
-  (ediff-copy-diff ediff-current-difference nil 'C nil
-                   (concat
-                    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
-                    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
-(defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
-(add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
 
 ;; https://lists.gnu.org/r/bug-gnu-emacs/2021-04/msg01344.html
 (use-package tramp
@@ -301,58 +146,13 @@
    (python . t)
    (jupyter . t)))
 
-(defun splash-banner ()
-  (let* ((banner '("૮ ・ﻌ・ა"
-                   ))
-         (longest-line (apply #'max (mapcar #'length banner))))
-    (put-text-property
-     (point)
-     (dolist (line banner (point))
-       (insert (+doom-dashboard--center
-                +doom-dashboard--width
-                (concat line (make-string (max 0 (- longest-line (length line))) 32)))
-               "\n"))
-     'face 'doom-dashboard-banner)))
+(after! eglot
+  :config
+  (set-eglot-client! 'rustic-mode '("rust-analyzer"))
 
-(setq +doom-dashboard-ascii-banner-fn #'splash-banner)
-
-(after! doom-modeline
-  ;; Set custom modal icon here
-  ;; (setq modal-icon-active "⭑૮​​​​･​​​ﻌ​​･​​​ა​​​⭑")
-  (setq modal-icon-active   "૮​​​​･​​​​​ﻌ​​​​･​​​​​ა​​​⋆")
-  (setq modal-icon-inactive "૮​​​–​​​​ﻌ​​​​–​​​აᷦᷦᷦ")
-
-  ;; Enable Unicode fallback
-  (setq doom-modeline-unicode-fallback t)
-
-  ;; Override definition in doom-modeline-segments.el:1746
-  (defun doom-modeline--modal-icon (text face help-echo)
-  "Display the model icon with FACE and HELP-ECHO.
-   TEXT is alternative if icon is not available."
-    (propertize (doom-modeline-icon
-                 'material
-                 (when doom-modeline-modal-icon "") ;; Trigger fallback by providing empty string
-                 (if (doom-modeline--active)
-                     (pcase text
-                       ;; (" <N> " "⋆૮​​​​･​​​​​ﻌ​​​​･​​​​​ა​​​⋆")
-                       (" <N> " "૮​​​​･​​​​​ﻌ​​​​･​​​​​ა​​​⭑")
-                       (" <I> " "૮​​​​･​​​​​ﻌ​​​​･​​​​​ა​​​✎")
-                       ((or " <V> " " <Vl> " " <Vb> ") "૮​​​​･​​​​​ﻌ​​​​･​​​​​ა​​​⚑")
-                       (" <R> " "૮​​​​･​​​​​ﻌ​​​​･​​​​​ა​​​⚠")
-                       (" <O> " "૮​​​​･​​​​​ﻌ​​​​･​​​​​ა​​​﹖"))
-                   modal-icon-inactive)
-                 text ;; Ascii fallback
-                 :face (doom-modeline-face face)
-                 ;; :v-adjust -0.225)
-                 :v-adjust -1)
-                 'help-echo help-echo)))
-
-(after! doom-themes
-  (setq doom-theme 'doom-spacegrey))
-
-;; (custom-theme-set-faces 'doom-spacegrey
-;; '(mode-line ((t . ((:foreground "blue")
-;;                    (:background "black")))))))
+  ;; hack to get rust-analyzer in exec-path, dunno how to actually get exec-path to mirror PATH
+  (setq exec-path (append exec-path '("/Users/jolin/.cargo/bin")))
+  (setq exec-path (append exec-path '("/home/jolin/.cargo/bin"))))
 
 ;; (after! lsp-rust
 ;;   (setq lsp-rust-server 'rust-analyzer)
@@ -363,20 +163,6 @@
 ;;                      :major-modes '(rustic-mode)
 ;;                      :remote? t
 ;;                      :server-id 'rust-analyzer-remote)))
-
-(after! eglot
-  :config
-  (set-eglot-client! 'rustic-mode '("rust-analyzer"))
-
-  ;; hack to get rust-analyzer in exec-path, dunno how to actually get exec-path to mirror PATH
-  (setq exec-path (append exec-path '("/Users/jolin/.cargo/bin")))
-  (setq exec-path (append exec-path '("/home/jolin/.cargo/bin"))))
-
-(after! evil-snipe
-  (setq evil-snipe-scope 'whole-buffer))
-
-(evil-snipe-def 1 'inclusive "t" "T")
-(evil-snipe-def 1 'exclusive "f" "F")
 
 ;; (module-load "/Users/jolin/.emacs.d/.local/straight/repos/emacs-zmq/emacs-zmq.dylib")
 
@@ -406,7 +192,7 @@
                   (goto-char start)
                   (insert outputStr))))
 
-;; this doesn't work :/
+;; TODO: how to make this work...
 (defun kb/toggle-window-transparency ()
   "Toggle transparency."
   (interactive)
@@ -414,5 +200,3 @@
     (pcase (frame-parameter nil 'alpha-background)
       (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
       (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
-
-(setq exec-path (append exec-path '("/Users/jolin/.cargo/bin")))
