@@ -16,6 +16,13 @@
   "c" #'evil-inner-curly
   "C" #'evilnc-inner-comment)
 
+(map! :m
+  "0" #'doom/backward-to-bol-or-indent)
+
+(map! :n
+  ;; "-" #'evil-previous-line-first-non-blank) ;; original binding
+  "-" #'evil-end-of-line)
+
 (map! :leader
   "g P" #'magit-push
   "g p" #'magit-pull
