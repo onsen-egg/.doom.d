@@ -1,42 +1,20 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-
-(setq doom-window-resize-rate-coarse 10)
-(setq doom-window-resize-rate-fine 1)
-
-;; Try to improve LSP performance
-;; https://emacs-lsp.github.io/lsp-mode/page/performance/#adjust-gc-cons-threshold
-(setq gc-cons-threshold 100000000)
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-
-;; broken
-;; How to do this o_o
-;; (defun lambda-fy (fn)
-;;   (lambda () (interactive) ((fn doom-window-resize-rate-hydra))))
-
-;https://codingstruggles.com/emacs/resizing-windows-doom-emacs.html#:~:text=Sometimes%20guessing%20the%20correct%20size,be%20repeated%20for%20each%20step.&text=Now%20we%20can%20just%20press,to%20resize%20the%20current%20window.; sync' after modifying this file!
-(defhydra doom-window-resize-hydra (:hint nil)
-;; "
-;;              _k_ increase height
-;; _h_ decrease width    _l_ increase width ... SHIFT to fine tune
-;;              _j_ decrease height
-;; "
-  ("h" (lambda () (interactive) (evil-window-decrease-width doom-window-resize-rate-coarse)))
-  ("j" (lambda () (interactive) (evil-window-decrease-height doom-window-resize-rate-coarse)))
-  ("k" (lambda () (interactive) (evil-window-increase-height doom-window-resize-rate-coarse)))
-  ("l" (lambda () (interactive) (evil-window-increase-width doom-window-resize-rate-coarse)))
-
-  ("H" (lambda () (interactive) (evil-window-decrease-width doom-window-resize-rate-fine)))
-  ("J" (lambda () (interactive) (evil-window-decrease-height doom-window-resize-rate-fine)))
-  ("K" (lambda () (interactive) (evil-window-increase-height doom-window-resize-rate-fine)))
-  ("L" (lambda () (interactive) (evil-window-increase-width doom-window-resize-rate-fine)))
-
-  ("q" nil))
-
 (map!
     (:prefix "SPC w"
      :desc "Hydra resize" :n "SPC" #'doom-window-resize-hydra/body))
+
+(map! :map evil-outer-text-objects-map
+  "b" #'evil-a-paren
+  "B" #'evil-a-bracket
+  "c" #'evil-a-curly
+  "C" #'evilnc-outer-comment)
+
+(map! :map evil-inner-text-objects-map
+  "b" #'evil-inner-paren
+  "B" #'evil-inner-bracket
+  "c" #'evil-inner-curly
+  "C" #'evilnc-inner-comment)
 
 (map! :leader
   "g P" #'magit-push
@@ -52,8 +30,6 @@
 (map! :n
   "g >" #'magit-status-full
   "g ." #'magit-status-truncated)
-
-(map! "g" 'self-insert-command)
 
 (map! :map magit-mode-map
   "." #'magit-status-toggle-truncated)
