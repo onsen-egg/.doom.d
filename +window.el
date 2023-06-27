@@ -1,5 +1,8 @@
 ;;; +window.el -*- lexical-binding: t; -*-
 
+(setq doom-window-resize-rate-coarse 5)
+(setq doom-window-resize-rate-fine 1)
+
 ;; https://codingstruggles.com/emacs/resizing-windows-doom-emacs.html#:~:text=Sometimes%20guessing%20the%20correct%20size,be%20repeated%20for%20each%20step.&text=Now%20we%20can%20just%20press,to%20resize%20the%20current%20window.; sync' after modifying this file!
 (defhydra doom-window-resize-hydra (:hint nil)
   ;; "
