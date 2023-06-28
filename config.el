@@ -5,9 +5,6 @@
 (setq user-full-name ""
       user-mail-address "")
 
-(beacon-mode 1)
-(map! :leader "l" #'beacon-blink)
-
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -79,6 +76,13 @@
 (load! "+evil")
 (load! "+window")
 (load! "+modeline")
+(load! "+proof-mode")
+
+(setq doom-localleader-key "SPC r")
+
+(beacon-mode 1)
+(map! :leader "l" #'beacon-blink)
+(map! :n "g t" '+lookup-type)
 
 (defun splash-banner ()
   (let* ((banner '("૮ ・ﻌ・ა"
